@@ -12,10 +12,14 @@
 (* optional: *)
 (* sudo apt-get install mlton *)
 
+(* Developed by Robin Milner *)
 (* Functional, declarative programming language like Scheme. *)
 (* It is not prefix notation. *)
 (* Everything must return something (some with side affects like print) *)
 (* Typed language; however, type is infered *)
+(* Not lazy evaluated *)
+(* (O)Caml and SML are apart of the same family *)
+(* Haskell and F# are based off of SML *)
 
 
 
@@ -55,13 +59,23 @@ fun app2 ([],z) = [z]            (* append with pattern and case *)
   | app2(a::y,z) = a::app2(y,z)
 ;
 
-(* case (42, false) of *)         (* pattern and case without being in a function *)
+(* case (42, false) of *)         (* pattern and case without being in a function *)                              (* more patterns such as 'as' *)
 (*     (x, true) => x *)
 (*   | (23, false) => 17 *)
 (*   | _ => 0; *)
 
-
-
+fun app3 (x,nil) = x
+  | app3 (x,l) =
+    let fun f(nil,l) = l
+          | f([a],l) = a::l
+          | f([a,b],l) = a::b::l
+          | f([a,b,c],l) = a::b::c::l
+          | f(a::b::c::d::r,l) = a::b::c::d::f(r,l)
+    in f(x,l)
+	
+    end
+;
+	
 
 
 fun map (f, []) = []
@@ -108,13 +122,13 @@ sig
     type t
     val talk : t -> unit
 end
-
+;
 (* structures are little libraries *)
 structure foo =
 struct
   val talk = fn x => TextIO.print x
 end
-
+;
 foo.talk "Hello\n";
 
 
